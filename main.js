@@ -10,6 +10,7 @@ const PORT = 1001
 
 const f = async () => {
     await database.connect()
+    await database.setupDatabase()
 
     fs.readdirSync("./api").forEach((f) => {
         const r = require("./api/"+f)
@@ -21,6 +22,7 @@ const f = async () => {
     })
 
     process.on("exit", () => {
+        database.close()
         console.log(`Server is closed.`)
     })
 
