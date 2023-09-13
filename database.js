@@ -1,14 +1,15 @@
 const sqlite = require("sqlite3").verbose()
 
 const database = {}
+database.DB_PATH = "./db/main.db"
 
 database.connect = function() {
     return new Promise((resolve, reject) => {
         console.log("[DB] Opening db connection...")
-        database.db = new sqlite.Database("./db/main.db", (error) => {
+        database.db = new sqlite.Database(database.DB_PATH, (error) => {
             if (error) {
                 console.log("[DB] Error trying to open db connection")
-                reject()
+                reject(error)
             }
             else {
                 console.log("[DB] Opened db connection!")
@@ -89,6 +90,8 @@ database.close = function() {
 database.setupDatabase = async function() {
     console.log("[DB] Setting up db...")
 
+    let e = await database.exec("PRAGMA foreign_keys = ON;")
+    if (e) return e
 
     //await database.exec("CREATE TALE tabelinha(codigo INTEGER PRIMARY KEY, nome TEXT, idade INTEGER DEFAULT 1)")
 

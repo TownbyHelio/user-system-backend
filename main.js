@@ -7,10 +7,19 @@ const database = require("./database")
 const app = express()
 const PORT = 1001
 
+function handleError(e) {
+    console.log(e)
+    database.close()
+    process.exit()
+}
+
 
 const f = async () => {
-    await database.connect()
-    await database.setupDatabase()
+    let e = await database.connect()
+    if (e) handleError(e)
+
+    e = await database.setupDatabase()
+    if (e) handleError(e)
 
     fs.readdirSync("./api").forEach((f) => {
         const r = require("./api/"+f)
