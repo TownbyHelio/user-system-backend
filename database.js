@@ -19,20 +19,6 @@ database.connect = function() {
 }
 
 
-database.run = function(sql, params=[]) {
-    if (callback) {
-        database.db.run(sql, params, callback)
-    }
-    else {
-        return new Promise((resolve, reject) => {
-            database.db.run(sql, params, (error) => {
-                resolve(error)
-            })
-        })
-    }
-}
-
-
 //#region ASYNC SQLITE
 database.exec = function(sql, callback=undefined) {
     if (callback) {
@@ -41,6 +27,19 @@ database.exec = function(sql, callback=undefined) {
     else {
         return new Promise((resolve, reject) => {
             database.db.exec(sql, (error) => {
+                resolve(error)
+            })
+        })
+    }
+}
+
+database.run = function(sql, params=[]) {
+    if (callback) {
+        database.db.run(sql, params, callback)
+    }
+    else {
+        return new Promise((resolve, reject) => {
+            database.db.run(sql, params, (error) => {
                 resolve(error)
             })
         })
