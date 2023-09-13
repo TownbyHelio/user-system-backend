@@ -1,6 +1,7 @@
 const sqlite = require("sqlite3").verbose()
 
 const database = {}
+const schemas = require("./db/schemas.json")
 database.DB_PATH = "./db/main.db"
 
 database.connect = function() {
@@ -93,8 +94,10 @@ database.setupDatabase = async function() {
     let e = await database.exec("PRAGMA foreign_keys = ON;")
     if (e) return e
 
-    //await database.exec("CREATE TALE tabelinha(codigo INTEGER PRIMARY KEY, nome TEXT, idade INTEGER DEFAULT 1)")
-
+    for (const s in schemas) {
+        e = await database.exec(schemas[s])
+        if (e) return e
+    }
 
     console.log("[DB] Db is set up!")
 }

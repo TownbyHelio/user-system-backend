@@ -7,12 +7,12 @@ const database = require("./database")
 const app = express()
 const PORT = 1001
 
+
 function handleError(e) {
     console.log(e)
     database.close()
     process.exit()
 }
-
 
 const f = async () => {
     let e = await database.connect()
