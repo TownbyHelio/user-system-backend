@@ -3,6 +3,7 @@ const bodyParser = require("body-parser")
 const fs = require("fs")
 
 const database = require("./database")
+const userManager = require("./userManager")
 
 const app = express()
 const PORT = 1001

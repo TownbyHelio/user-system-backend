@@ -35,7 +35,7 @@ database.exec = function(sql, callback=undefined) {
     }
 }
 
-database.run = function(sql, params=[]) {
+database.run = function(sql, params=[], callback=null) {
     if (callback) {
         database.db.run(sql, params, callback)
     }
@@ -91,7 +91,7 @@ database.close = function() {
 database.setupDatabase = async function() {
     console.log("[DB] Setting up db...")
 
-    let e = await database.exec("PRAGMA foreign_keys = ON;")
+    let e = await database.exec("PRAGMA foreign_keys = ON")
     if (e) return e
 
     for (const s in schemas) {
