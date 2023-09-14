@@ -7,6 +7,7 @@ const router = express.Router()
 /*
 ERROR CODES:
 1001 - Invalid username length
+1002 - Invalid username characters
 */
 router.post("/registerUser", bodyParser.json(), (req, res) => {
     const username = req.body["username"]
@@ -28,18 +29,20 @@ router.post("/registerUser", bodyParser.json(), (req, res) => {
     }
 
 
+
     if (username.length < 5 || username.length > 32) {
         res.json({success: false, errorCode: 1001, errorMessage: "Username must be at least 5 and at most 32 characters long"})
         return
     }
 
     if (!username.match(/^[a-zA-Z0-9_]+$/) || !username.match(/[a-zA-Z]/)) {
-        res.json({success: false, errorCode: 1001, errorMessage: "Username must contain only letters, numbers and underscore. At least one letter is required"})
+        res.json({success: false, errorCode: 1002, errorMessage: "Username must contain only letters, numbers and underscore. At least one letter is required"})
         return
     }
 
 
-    
+
+    // 
 
     res.json({success: true})
 }, requestErrorHandler)
