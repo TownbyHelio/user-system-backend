@@ -14,10 +14,10 @@ userManager.generateNewCookie = function() {
     return cookie
 }
 
-userManager.createUser = async function(username, password, email, description="") {
+userManager.createUser = async function(username, password, email) {
     const cookie = userManager.generateNewCookie()
 
-    let e = await database.run("INSERT INTO users (username, cookie, password, email, description) VALUES (?,?,?,?,?)", [username, password, cookie, email, description])
+    let e = await database.run("INSERT INTO users (username, cookie, password, email) VALUES (?,?,?,?,?)", [username, password, cookie, email])
     if (e) return e
 }
 
