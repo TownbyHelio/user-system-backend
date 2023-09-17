@@ -2,6 +2,7 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const requestErrorHandler = require("../util/requestErrorHandler")
 const userManager = require("../userManager")
+const emailConfirmations = require("../emailConfirmations")
 
 const router = express.Router()
 
@@ -21,6 +22,7 @@ ERROR CODES:
 
 1015 - Error creating user
 1016 - Error trying to find user in database
+1017 - Error creating confirmation in database
 */
 router.post("/registerUser", bodyParser.json(), async (req, res) => {
     const username = req.body["username"]
@@ -84,10 +86,23 @@ router.post("/registerUser", bodyParser.json(), async (req, res) => {
         }
     }
 
-    let [user, e] = await userManager.getUserByUsername(username)
-    if (!user || e) {
-        res.json({success: false, errorCode: 1016, errorMessage: "User was created, but an error occurred when trying to get user information in the database (try getting it through another request)"})
-        return
+    let user
+    {
+        let [u, e] = await userManager.getUserByUsername(username)
+        if (!u || e) {
+            res.json({success: false, errorCode: 1016, errorMessage: "User was created, but an error occurred when trying to get user information in the database (try getting it through /api/getUser)"})
+            return
+        }
+        user = u
+    }
+
+    {
+        let [code, e] = await emailConfirmations.newConfirmation(email)
+        if (!code || e) {
+            res.json({success: false, errorCode: 1017, errorMessage: "User was created, but an error occurred when trying to register the email confirmation"})
+            console.log(e)
+            return
+        }
     }
 
     res.json({success: true, id: user.id, cookie: user.cookie})

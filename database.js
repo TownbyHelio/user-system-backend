@@ -85,7 +85,7 @@ database.each = function(sql, params, callback=undefined, complete=undefined) {
 database.close = async function() {
     console.log("[DB] Closing db...")
     //await database.exec("DROP TABLE users")
-    database.db.close()
+    await database.db.close()
     console.log("[DB] Closed db!")
 }
 

@@ -3,24 +3,25 @@ const fs = require("fs")
 
 const database = require("./database")
 const userManager = require("./userManager")
+const emailConfirmations = require("./emailConfirmations")
 
 const app = express()
 const PORT = 1001
 
 
-function handleError(e) {
+async function handleError(e) {
     console.log(e)
-    database.close()
+    await database.close()
     process.exit()
 }
 
 
 const f = async () => {
     let e = await database.connect()
-    if (e) handleError(e)
+    if (e) await handleError(e)
 
     e = await database.setupDatabase()
-    if (e) handleError(e)
+    if (e) await handleError(e)
 
 
     fs.readdirSync("./api").forEach((f) => {

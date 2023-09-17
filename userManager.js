@@ -1,4 +1,5 @@
 const database = require("./database")
+const emailConfirmations = require("./emailConfirmations")
 
 const userManager = {}
 
