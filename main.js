@@ -1,5 +1,4 @@
 const express = require("express")
-const bodyParser = require("body-parser")
 const fs = require("fs")
 
 const database = require("./database")
@@ -15,12 +14,14 @@ function handleError(e) {
     process.exit()
 }
 
+
 const f = async () => {
     let e = await database.connect()
     if (e) handleError(e)
 
     e = await database.setupDatabase()
     if (e) handleError(e)
+
 
     fs.readdirSync("./api").forEach((f) => {
         const r = require("./api/"+f)

@@ -55,8 +55,8 @@ database.get = function(sql, params, callback=undefined) {
     else {
         return new Promise((resolve, reject) => {
             database.db.get(sql, params, (error, row) => {
-                if (error) resolve(null, error)
-                else resolve(row)
+                if (error) resolve([null, error])
+                else resolve([row, null])
             })
         })
     }
@@ -69,8 +69,8 @@ database.all = function(sql, params, callback=undefined) {
     else {
         return new Promise((resolve, reject) => {
             database.db.all(sql, params, (error, rows) => {
-                if (error) resolve(null, error)
-                else resolve(rows)
+                if (error) resolve([null, error])
+                else resolve([rows, null])
             })
         })
     }
@@ -82,8 +82,9 @@ database.each = function(sql, params, callback=undefined, complete=undefined) {
 //#endregion ASYNC SQLITE
 
 
-database.close = function() {
+database.close = async function() {
     console.log("[DB] Closing db...")
+    //await database.exec("DROP TABLE users")
     database.db.close()
     console.log("[DB] Closed db!")
 }

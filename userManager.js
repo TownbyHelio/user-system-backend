@@ -14,23 +14,27 @@ userManager.generateNewCookie = function() {
     return cookie
 }
 
-userManager.createUser = async function(username, password, email) {
+userManager.createUser = function(username, password, email) {
     const cookie = userManager.generateNewCookie()
-
-    let e = await database.run("INSERT INTO users (username, cookie, password, email) VALUES (?,?,?,?,?)", [username, password, cookie, email])
-    if (e) return e
+    return database.run("INSERT INTO users (username, cookie, password, email) VALUES (?,?,?,?)", [username, cookie, password, email])
 }
 
-userManager.getUserIdByUsername = async function(username) {
-    let row, e = await database.get("SELECT id FROM users WHERE username = ?", [username])
-    if (e) return null, e
-
-    return row.id
-}
-
-/*userManager.updateRow = async function(id, row, value) {
-
+/*userManager.getUserIdByUsername = async function(username) {
+    let [user, e] = await database.get("SELECT id FROM users WHERE username = ?", [username])
+    return [user.id, e]
 }*/
+
+userManager.getUserById = function(id) {
+    return userManager.getUser("id", id)
+}
+
+userManager.getUserByUsername = function(username) {
+    return userManager.getUser("username", username)
+}
+
+userManager.getUser = function(column, value) {
+    return database.get(`SELECT * FROM users WHERE ${column} = ?`, [value])
+}
 
 
 module.exports = userManager
